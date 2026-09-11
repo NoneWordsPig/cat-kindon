@@ -1209,8 +1209,10 @@ dojo.declare("com.nuclearunicorn.game.ui.SpaceProgramBtnController", com.nuclear
 
     getPrices: function(model) {
         var prices = dojo.clone(model.metadata.prices);
+        var priceMultiplier = this.game.buildingPriceMultiplier;
 
         for (var i = 0; i < prices.length; i++){
+			prices[i].val *= priceMultiplier;
             if (prices[i].name == "oil"){
                 var reductionRatio = this.game.getLimitedDR(this.game.getEffect("oilReductionRatio"), 0.75);
                 prices[i].val *= (1 - reductionRatio);
@@ -1306,7 +1308,7 @@ dojo.declare("classes.ui.space.PlanetBuildingBtnController", com.nuclearunicorn.
              }
 			 var resPriceDiscount = this.game.getLimitedDR(this.game.getEffect(prices[i].name + "CostReduction"), 1);
 			 var resPriceModifier = 1 - resPriceDiscount;
-			 prices[i].val *= priceModifier * resPriceModifier; //CostReduction effects
+			 prices[i].val *= priceModifier * resPriceModifier * this.game.buildingPriceMultiplier; //CostReduction effects
 		}
 
 		if (this.game.challenges.isActive("blackSky")

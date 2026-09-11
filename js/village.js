@@ -1803,7 +1803,7 @@ dojo.declare("classes.village.ui.map.UpgradeHQController", com.nuclearunicorn.ga
 	getPrices: function(model) {
 		var prices = dojo.clone(model.options.prices);
 		for (var i = 0; i < prices.length; i++) {
-            prices[i].val *= Math.pow(1.25, this.game.village.map.hqLevel);
+            prices[i].val *= Math.pow(1.25, this.game.village.map.hqLevel) * this.game.buildingPriceMultiplier;
 		}
 		return prices;
 	},
@@ -1850,7 +1850,7 @@ dojo.declare("classes.village.ui.map.UpgradeExplorersController", com.nuclearuni
 	getPrices: function(model) {
 		var prices = dojo.clone(model.options.prices);
 		for (var i = 0; i < prices.length; i++) {
-            prices[i].val *= Math.pow(1.25, this.game.village.map.explorersLevel);
+            prices[i].val *= Math.pow(1.25, this.game.village.map.explorersLevel) * this.game.buildingPriceMultiplier;
 		}
 		return prices;
 	},

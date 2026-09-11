@@ -1709,6 +1709,9 @@ dojo.declare("com.nuclearunicorn.game.ui.GamePage", null, {
 	server: null,
 	math: null,
 
+	//multiplier applied to every building/upgrade purchase price (1 = default game price, 0.25 = 1/4 of the price)
+	buildingPriceMultiplier: 0.25,
+
 	//global cache
 	globalEffectsCached: {},
 

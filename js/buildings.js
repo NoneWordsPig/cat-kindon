@@ -2110,6 +2110,7 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 		additionalBought = additionalBought || 0;
 	 	var bldPrices = bld.get("prices");
 		var ratio = this.getPriceRatioWithAccessor(bld);
+		var priceMultiplier = this.game.buildingPriceMultiplier;
 
 		var prices = [];
 
@@ -2121,7 +2122,7 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 			var resPriceDiscount = this.game.getLimitedDR(this.game.getEffect(bldPrices[i].name + "CostReduction"), 1);
 			var resPriceModifier = 1 - resPriceDiscount;
 			prices.push({
-				val: bldPrices[i].val * Math.pow(ratio, bld.get("val") + fakeBought) * priceModifier * resPriceModifier,
+				val: bldPrices[i].val * Math.pow(ratio, bld.get("val") + fakeBought) * priceModifier * resPriceModifier * priceMultiplier,
 				name: bldPrices[i].name
 			});
 		}

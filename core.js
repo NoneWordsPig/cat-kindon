@@ -1906,7 +1906,7 @@ dojo.declare("com.nuclearunicorn.game.ui.BuildingStackableBtnController", com.nu
 			resPriceDiscount = this.game.getLimitedDR(resPriceDiscount, 1);
 			var resPriceModifier = 1 - resPriceDiscount;
             prices.push({
-            	val: meta.prices[i].val * Math.pow(ratio, meta.val) * resPriceModifier * priceModifier,
+            	val: meta.prices[i].val * Math.pow(ratio, meta.val) * resPriceModifier * priceModifier * this.game.buildingPriceMultiplier,
             	name: meta.prices[i].name
 			});
         }
