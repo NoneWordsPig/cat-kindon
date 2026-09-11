@@ -344,6 +344,7 @@
 				<div class="links-block" style="padding-top:3px; display:inline-flex;">
 					<a id="save-link" href="#" onclick="gamePage.saveUI();"  title="本地保存在浏览器缓存里" >Save</a> |
 					<a id="options-link" href="#" onclick="$('#optionsDiv').toggle();">Options</a> |
+					<a id="speed-link" href="#" onclick="$('#speedPanel').toggle(); return false;" title="调节游戏速度倍率">加速</a> |
 
 					<a id="reset-link" href="#" onclick="gamePage.reset();">Reset</a> |
 					<span id="devModeButton" style="display: none;"><a href="#" id="devBtn" onclick="dev();">DEV</a> |</span>
@@ -698,9 +699,146 @@
 				<!--  | <a href="classic/" target="_blank">classic</a> -->
 			</div>
 		</div>
+		<!-- 加速倍率 开始 -->
+		<div id="speedPanel">
+			<div class="speed-head">
+				<span>加速倍率</span>
+				<a href="#" class="speed-close" onclick="$('#speedPanel').hide(); return false;">×</a>
+			</div>
+			<div class="speed-value"><span id="speedValue">1.0</span>×<small id="speedTicks">5 tick/秒</small></div>
+			<input type="range" id="speedRange" min="1" max="10" step="0.1" value="1">
+			<div class="speed-scale"><span>1×</span><span>5×</span><span>10×</span></div>
+			<div class="speed-row">
+				<label for="speedInput">自定义</label>
+				<input type="number" id="speedInput" min="1" step="0.5" value="1">
+				<span>×</span>
+				<button type="button" id="speedReset">重置</button>
+			</div>
+			<div class="speed-hint">倍率超过 10× 时滑块停在 10×；数值过高时浏览器可能卡顿。</div>
+		</div>
+		<!-- 加速倍率 结束 -->
 		<style>
 			.boostType {
 				font-size: 3vh;
+			}
+
+			/* ---------- 加速倍率面板 ---------- */
+			#speedPanel {
+				display: none;
+				position: fixed;
+				right: 10px;
+				bottom: 46px;
+				z-index: 500;
+				box-sizing: border-box;
+				width: 240px;
+				padding: 10px 12px 12px;
+				background-color: #fff;
+				border: 1px solid #000;
+				border-radius: 3px;
+				box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.35);
+				font-size: 12px;
+				color: #000;
+			}
+			#speedPanel .speed-head {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				padding-bottom: 6px;
+				margin-bottom: 8px;
+				border-bottom: 1px solid #ddd;
+				font-weight: bold;
+			}
+			#speedPanel .speed-close {
+				text-decoration: none;
+				color: #999;
+				font-size: 16px;
+				line-height: 1;
+			}
+			#speedPanel .speed-close:hover {
+				color: #000;
+			}
+			#speedPanel .speed-value {
+				text-align: center;
+				font-size: 20px;
+				font-weight: bold;
+				margin-bottom: 8px;
+			}
+			#speedPanel .speed-value small {
+				margin-left: 5px;
+				font-size: 11px;
+				font-weight: normal;
+				color: #999;
+			}
+			#speedRange {
+				-webkit-appearance: none;
+				appearance: none;
+				display: block;
+				width: 100%;
+				height: 4px;
+				margin: 0;
+				background-color: #ddd;
+				border-radius: 2px;
+				outline: none;
+				cursor: pointer;
+			}
+			#speedRange::-webkit-slider-thumb {
+				-webkit-appearance: none;
+				appearance: none;
+				width: 14px;
+				height: 14px;
+				background-color: #4a90d9;
+				border: 1px solid #2b6cb0;
+				border-radius: 50%;
+				cursor: pointer;
+			}
+			#speedRange::-moz-range-thumb {
+				width: 12px;
+				height: 12px;
+				background-color: #4a90d9;
+				border: 1px solid #2b6cb0;
+				border-radius: 50%;
+				cursor: pointer;
+			}
+			#speedPanel .speed-scale {
+				display: flex;
+				justify-content: space-between;
+				margin-top: 3px;
+				font-size: 10px;
+				color: #999;
+			}
+			#speedPanel .speed-row {
+				display: flex;
+				align-items: center;
+				margin-top: 10px;
+			}
+			#speedPanel .speed-row label {
+				margin-right: 6px;
+			}
+			#speedPanel input[type="number"] {
+				box-sizing: border-box;
+				width: 66px;
+				padding: 2px 4px;
+				border: 1px solid #ccc;
+				border-radius: 2px;
+				font-size: 12px;
+			}
+			#speedPanel .speed-row button {
+				margin-left: auto;
+				padding: 2px 10px;
+				background-color: #f5f5f5;
+				border: 1px solid #ccc;
+				border-radius: 2px;
+				font-size: 12px;
+				cursor: pointer;
+			}
+			#speedPanel .speed-row button:hover {
+				background-color: #e8e8e8;
+			}
+			#speedPanel .speed-hint {
+				margin-top: 8px;
+				font-size: 10px;
+				line-height: 1.5;
+				color: #999;
 			}
 		</style>
 		<script type="text/javascript">
@@ -774,6 +912,108 @@
 				}
 			};
 			_282d5adfdca92885cd9f210a9b60a328();
+
+			/* ---------- 加速倍率 ---------- */
+			var SPEED_BASE_TICKS = 5;			// 1× 时游戏原始的 tick 速率
+			var SPEED_SLIDER_MAX = 10;			// 滑块上限
+			var SPEED_STORAGE_KEY = 'zh.speed.multiplier';
+
+			var getSavedSpeedMultiplier = function() {
+				var value = parseFloat(localStorage[SPEED_STORAGE_KEY]);
+				return (isFinite(value) && value >= 1) ? value : 1;
+			};
+
+			var formatSpeedMultiplier = function(value) {
+				return (value % 1 === 0) ? value.toFixed(1) : String(Math.round(value * 100) / 100);
+			};
+
+			var updateSpeedUI = function(multiplier) {
+				var ticks = (typeof gamePage !== "undefined" && gamePage.ticksPerSecond)
+					? gamePage.ticksPerSecond
+					: SPEED_BASE_TICKS * multiplier;
+				$("#speedValue").text(formatSpeedMultiplier(multiplier));
+				$("#speedTicks").text(Math.round(ticks * 10) / 10 + " tick/秒");
+				$("#speedRange").val(Math.min(multiplier, SPEED_SLIDER_MAX));
+				$("#speedInput").val(multiplier);
+			};
+
+			var restartGameTicker = function() {
+				if (typeof gamePage === "undefined") {
+					return;
+				}
+				if (gamePage.worker) {
+					try {
+						gamePage.worker.terminate();
+					} catch (ex) {
+						console.error(ex);
+					}
+					gamePage.worker = null;
+				}
+				if (gamePage._mainTimer) {
+					clearInterval(gamePage._mainTimer);
+					gamePage._mainTimer = null;
+				}
+				// start() 会按新的 ticksPerSecond 重建 worker 或定时器
+				gamePage.start();
+				gamePage.render();
+			};
+
+			var setSpeedMultiplier = function(value) {
+				value = parseFloat(value);
+				if (!isFinite(value) || value < 1) {
+					value = 1;
+				}
+				value = Math.round(value * 100) / 100;
+
+				if (typeof gamePage !== "undefined") {
+					if (gamePage.speedMultiplier === value) {
+						updateSpeedUI(value);
+						return value;
+					}
+					gamePage.speedMultiplier = value;
+					gamePage.ticksPerSecond = SPEED_BASE_TICKS * value;
+					restartGameTicker();
+				}
+				localStorage[SPEED_STORAGE_KEY] = value;
+				updateSpeedUI(value);
+				return value;
+			};
+
+			// 拖动时只更新数字显示，松开后才真正生效
+			$("#speedRange").on('input', function() {
+				var value = parseFloat($(this).val());
+				$("#speedValue").text(formatSpeedMultiplier(value));
+				$("#speedInput").val(value);
+			});
+			$("#speedRange").on('change', function() {
+				setSpeedMultiplier($(this).val());
+			});
+			$("#speedInput").on('change', function() {
+				setSpeedMultiplier($(this).val());
+			});
+			$("#speedInput").on('keydown', function(event) {
+				if (event.keyCode === 13) {
+					setSpeedMultiplier($(this).val());
+				}
+			});
+			$("#speedReset").on('click', function() {
+				setSpeedMultiplier(1);
+			});
+
+			updateSpeedUI(getSavedSpeedMultiplier());
+
+			// 等游戏计时器就绪后再恢复上次的倍率，避免和 initGame 里的 start() 重复启动
+			var restoreSpeedMultiplier = function() {
+				if (typeof gamePage === "undefined" || (!gamePage._mainTimer && !gamePage.worker)) {
+					setTimeout(restoreSpeedMultiplier, 500);
+					return;
+				}
+				var saved = getSavedSpeedMultiplier();
+				if (saved !== 1) {
+					setSpeedMultiplier(saved);
+				}
+			};
+			restoreSpeedMultiplier();
 		</script>
 
 	</body>
