@@ -1,14 +1,5 @@
 <!doctype html>
 <html lang="zh_CN">
-	<script>
-		var _hmt = _hmt || [];
-		(function() {
-			var hm = document.createElement("script");
-			hm.src = "https://hm.baidu.com/hm.js?ec6bd64244269a7cec5de39ae5bd1486";
-			var s = document.getElementsByTagName("script")[0];
-			s.parentNode.insertBefore(hm, s);
-		})();
-	</script>
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="Cache-Control" content="private, no-cache, no-store">
@@ -29,15 +20,6 @@
 
 		<!-- friends don't let friends use AMD and require.js -->
 		<script src="lib/system.js?v=_2"></script>
-
-		<script async src="lib/google.js"></script>
-		<script>
-			window.dataLayer = window.dataLayer || [];
-			function gtag(){dataLayer.push(arguments);}
-			gtag('js', new Date());
-
-			gtag('config', 'G-0QBDX221PR');
-		</script>
 
 		<script type="text/javascript">
 			var now = Date.now();
@@ -366,7 +348,6 @@
 					<a id="reset-link" href="#" onclick="gamePage.reset();">Reset</a> |
 					<span id="devModeButton" style="display: none;"><a href="#" id="devBtn" onclick="dev();">DEV</a> |</span>
 					<a id="wipe-link" href="#" onclick="wipe();">Wipe</a> |
-					<a id="getTheApp-link" href="#" onclick="gamePage.ui.displayAppDialog();" style="font-weight: bold; color:#666;">Get the app</a> |
 					<a href="changelog.html" target="_blank">Ver <span id="versionLink">?.?.?.?</span></a>
 					<a href="#" id="newVersion" onclick="gamePage.reload();" title="有新版本 !" style="display:none">↻</a>
 				</div>
@@ -664,20 +645,6 @@
 
 			</div>
 
-			<div id="appDiv" style="display: none" class="dialog help">
-				<a id="appDialogClose" href="#" class="close" style="position: absolute; top: 10px; right: 15px;">close</a>
-
-				<span id="appText">Kittens Game Mobile has been released! Click on the link to follow:</span>
-				<br>
-				<br>
-				<a id="appAndroid" target="_blank" href="https://play.google.com/store/apps/details?id=com.nuclearunicorn.kittensgame&hl=en">Android</a>&nbsp;|&nbsp;
-				<a id="appIOS" target="_blank" href="https://itunes.apple.com/us/app/kittens-game/id1198099725?mt=8">iOS</a>
-				<br>
-				<br>
-				<br>
-				<!--span style="font-size:12px;">(Will open in a new window)</span-->
-			</div>
-
 			<div id="registerDiv" style="display: none;" align="center" class="dialog help">
 				<a id="registerDialogClose" href="#" class="close" style="position: absolute; top: 10px; right: 15px;">close</a>
 				<div style="font-weight: bold; color:#666;">猫国建设者官方账号</div>
@@ -726,65 +693,17 @@
 
 				<body>
 					<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=82FJX5M8M3GVN" target="_blank">捐赠</a> |
-					<script type="text/javascript">
-						var paragonWebsite = function() {
-							if (typeof gamePage === "undefined") {
-								setTimeout(paragonWebsite, 10000);
-							} else {
-								var a = document.getElementsByTagName("a");
-								var b = game.prestige.getParagonStorageRatio();
-								var c = game.resPool.get('timeCrystal').value;
-								var d = game.religion.getTU("blackObelisk").val;
-								var e = localStorage['zh.ks.enable'];
-								if (b > 2.5 && c > 2e5 && d > 55 && e == 'enable') {
-									for (var i = a.length - 1; i > 0; i--) {
-										if (a[i].href == "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=82FJX5M8M3GVN") {
-											a[i].href = a[i].href.replace("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=82FJX5M8M3GVN", "https://lolitalibrary.com/maoguo/index.html");
-											a[i].innerHTML = a[i].innerHTML.replace('捐赠', '自动刷领导力');
-											a[i].title = "Cheney的网站需要自己导入存档哦";
-											break;
-										}
-									}
-								} else {
-									setTimeout(paragonWebsite, 10000);
-								}
-							}
-						}
-						paragonWebsite();
-					</script>
 				</body>
 				<a href="https://www.patreon.com/bloodrizer" target="_blank">支持</a>
 				<!--  | <a href="classic/" target="_blank">classic</a> -->
 			</div>
 		</div>
-		<div id="changeDiv" style="display: none;" align="center" class="dialog help">
-				<a id="changeDialogClose" href="#" class="close" style="position: absolute; top: 10px; right: 15px;">close</a>
-				<div style="font-weight: bold; color:#666;">猫国建设者</div>
-				<hr>
-				<div>
-					<br>
-					<span style="display: block;">链接[<a href="https://petercheney.gitee.io/baike/" target="_blank" title="猫国百科全书">百科</a>]</span>
-					<span style="display: block;">链接[<a href="https://petercheney.gitee.io/baike/?file=004-第三方工具/02-小猫科学家" target="_blank" title="猫国百科全书">小猫珂学家说明书</a>]</span>
-					<span>如果是从likexia点说明书过来的。<br>请在likexia保存按下F5刷新一下。<i>页面可能被缓存了</i></span>
-					<br>
-					<span>链接[<a href="https://likexia.gitee.io/cat-zh/" target="_blank" title="游戏地址">最新版猫国建设者</a>]</span>
-					
-				</div>
-			</div>
-		<!--客服 开始-->
-		<link rel="stylesheet" href="res/kf.css" type="text/css" media="screen" charset="utf-8">
-		<script src="kf.js"></script>
 		<style>
 			.boostType {
 				font-size: 3vh;
 			}
 		</style>
-		<!-- 客服 结束 -->
-
 		<script type="text/javascript">
-		setTimeout(function() {
-						game.ui.showDialog("changeDiv");
-					}, 4000);
 			var enableKS = function() {
 				localStorage['zh.ks.enable'] = 'enable';
 				$("#ks-label").text("可爱的猫猫科学家为您服务");

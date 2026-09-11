@@ -1104,10 +1104,6 @@ dojo.declare("classes.ui.DesktopUI", classes.ui.UISystem, {
         });
     },
 
-    displayAppDialog: function(){
-        this.showDialog("appDiv");
-    },
-
     load: function() {
         // swap to bonfire if the current tab is not visible
         var tabs = this.game.tabs;
