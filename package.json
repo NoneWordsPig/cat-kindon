@@ -2,16 +2,14 @@
   "name": "kitten-game",
   "version": "14.8.0",
   "description": "A game of kittens",
-  "main": "config.js",
-  "directories": {
-    "lib": "lib",
-    "test": "test"
-  },
+  "main": "desktop/main.js",
   "scripts": {
     "build": "node tools/generate-buildver.js",
     "test": "jest --config jest.config.unittest.json",
     "lint": "eslint *.js js/*.js --quiet",
-    "start": "http-server"
+    "start": "http-server",
+    "desktop": "electron .",
+    "dist:win": "electron-builder --win"
   },
   "repository": {
     "type": "git",
@@ -25,9 +23,31 @@
   "license": "SEE LICENSE IN license.txt",
   "homepage": "https://bitbucket.org/bloodrizer/kitten-game#readme",
   "devDependencies": {
+    "electron": "^31.7.7",
+    "electron-builder": "^24.13.3",
     "eslint": "^7.4.0",
     "http-server": "^0.12.3",
     "husky": "^4.2.5",
     "jest": "^26.1.0"
+  },
+  "build": {
+    "appId": "com.catkindon.game",
+    "productName": "猫国建设者",
+    "files": [
+      "**/*",
+      "!node_modules/.cache/**",
+      "!test/**"
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": null
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
   }
 }
